@@ -1,0 +1,40 @@
+@model IEnumerable<Taver.Models.Artwork>
+@{
+    ViewData["Title"] = "Dashboard";
+    var total = ViewData["TotalCount"] as int? ?? 0;
+}
+
+<h2 class="mb-4">Admin Dashboard</h2>
+<p class="lead">Total artworks: <strong>@total</strong></p>
+<p>
+    <a asp-action="AddWork" class="btn btn-primary">Add New Artwork</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No artworks yet. Add your first one above.</p>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <img src="~/@item.ImagePath" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;" loading="lazy" />
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text text-muted small">@item.Category · @(item.Year?.ToString() ?? "—")</p>
+                        <div class="d-flex gap-2">
+                            <a asp-action="EditWork" asp-route-id="@item.ArtworkID" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@item.ArtworkID" method="post" class="d-inline" onsubmit="return confirm('Delete this artwork?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

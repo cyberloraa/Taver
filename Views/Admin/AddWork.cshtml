@@ -1,0 +1,38 @@
+@model Taver.Models.ArtworkEditViewModel
+@{
+    ViewData["Title"] = "Add Artwork";
+}
+
+<h2 class="mb-4">Add Artwork</h2>
+<form asp-action="AddWork" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Upload Image (jpg, png, webp; max 5 MB)</label>
+        <input type="file" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.webp" required />
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Category" class="form-label"></label>
+            <input asp-for="Category" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Year" class="form-label"></label>
+            <input asp-for="Year" type="number" class="form-control" min="1900" max="2100" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

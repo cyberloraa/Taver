@@ -1,0 +1,51 @@
+@model IEnumerable<Taver.Models.Artwork>
+@{
+    ViewData["Title"] = "My Works";
+    var total = (int)(ViewData["TotalCount"] ?? 0);
+    var page = (int)(ViewData["Page"] ?? 1);
+    var totalPages = (int)(ViewData["TotalPages"] ?? 1);
+}
+
+<h2 class="text-center mb-5">My Works</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-center text-muted">No artworks yet.</p>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/@item.ImagePath" class="card-img-top" alt="@item.Title" style="height: 280px; object-fit: cover;" loading="lazy" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@item.Title</h5>
+                        <a asp-route="work-detail" asp-route-id="@item.ArtworkID" class="btn btn-outline-dark mt-auto">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (totalPages > 1)
+    {
+        <nav class="mt-5 d-flex justify-content-center">
+            <ul class="pagination">
+                @if (page > 1)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(page - 1)">Previous</a></li>
+                }
+                @for (var p = 1; p <= totalPages; p++)
+                {
+                    <li class="page-item @(p == page ? "active" : "")"><a class="page-link" asp-action="Index" asp-route-page="@p">@p</a></li>
+                }
+                @if (page < totalPages)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(page + 1)">Next</a></li>
+                }
+            </ul>
+        </nav>
+    }
+}

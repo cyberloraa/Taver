@@ -1,0 +1,31 @@
+@model List<Taver.Models.UserWithRolesViewModel>
+@{
+    ViewData["Title"] = "Super Admin";
+}
+
+<h2 class="mb-4">User management</h2>
+<p>
+    <a asp-action="CreateUser" class="btn btn-primary">Create user</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Email / User name</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Email</td>
+                <td>@item.RolesDisplay</td>
+                <td>
+                    <a asp-action="ChangePassword" asp-route-id="@item.UserId" class="btn btn-outline-primary btn-sm">Change password</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

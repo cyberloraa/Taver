@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Home";
+    var artist = ViewData["Artist"] as Taver.Models.Artist;
+    var featured = ViewData["FeaturedArtworks"] as IList<Taver.Models.Artwork> ?? new List<Taver.Models.Artwork>();
+}
+
+<section class="hero-section py-5 mb-5 text-center">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3">@(artist?.Name ?? "Artist")</h1>
+        <p class="lead mb-4">Drawings &amp; illustrations</p>
+        <a asp-controller="Works" asp-action="Index" class="btn btn-danger btn-lg">View My Works</a>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Artworks</h2>
+        @if (featured.Any())
+        {
+            <div class="row g-4">
+                @foreach (var item in featured)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <a asp-route="work-detail" asp-route-id="@item.ArtworkID">
+                                <img src="~/@item.ImagePath" class="card-img-top" alt="@item.Title" style="height: 280px; object-fit: cover;" loading="lazy" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Title</h5>
+                                <a asp-route="work-detail" asp-route-id="@item.ArtworkID" class="btn btn-outline-dark btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted">No artworks yet. Check back soon.</p>
+        }
+    </div>
+</section>
+
+<section class="py-5 section-surface">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="mb-3">About Me</h2>
+                <p class="lead">@(artist?.Bio != null && artist.Bio.Length > 200 ? artist.Bio.Substring(0, 200) + "…" : artist?.Bio ?? "Welcome to my portfolio.")</p>
+                <a asp-action="About" class="btn btn-outline-dark">Read more</a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,33 @@
+@model Taver.Models.Artwork
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaDescription"] = string.IsNullOrEmpty(Model.Description) ? Model.Title : (Model.Description.Length > 160 ? Model.Description.Substring(0, 157) + "…" : Model.Description);
+}
+
+<div class="row py-5">
+    <div class="col-lg-7 mb-4 mb-lg-0">
+        <img src="~/@Model.ImagePath" class="img-fluid rounded shadow" alt="@Model.Title" loading="lazy" />
+    </div>
+    <div class="col-lg-5">
+        <h1 class="mb-3">@Model.Title</h1>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="lead">@Model.Description</p>
+        }
+        <dl class="row">
+            @if (Model.Year.HasValue)
+            {
+                <dt class="col-sm-4">Year</dt>
+                <dd class="col-sm-8">@Model.Year</dd>
+            }
+            @if (!string.IsNullOrEmpty(Model.Category))
+            {
+                <dt class="col-sm-4">Category</dt>
+                <dd class="col-sm-8">@Model.Category</dd>
+            }
+            <dt class="col-sm-4">Artist</dt>
+            <dd class="col-sm-8">@Model.Artist?.Name</dd>
+        </dl>
+        <a asp-controller="Works" asp-action="Index" class="btn btn-outline-dark">Back to gallery</a>
+    </div>
+</div>

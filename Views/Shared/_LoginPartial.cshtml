@@ -1,0 +1,29 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="SuperAdmin" asp-action="Index">Super Admin</a>
+        </li>
+    }
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <form class="form-inline" asp-controller="Admin" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="nav-link btn btn-link">Logout</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Admin" asp-action="Login">Login</a>
+    </li>
+}
+</ul>

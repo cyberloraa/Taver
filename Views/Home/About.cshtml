@@ -1,0 +1,28 @@
+@model Taver.Models.Artist
+@{
+    ViewData["Title"] = "About";
+}
+
+<div class="row align-items-center py-5">
+    @if (!string.IsNullOrEmpty(Model.ProfileImage))
+    {
+        <div class="col-md-4 mb-4 mb-md-0">
+            <img src="~/@Model.ProfileImage" alt="@Model.Name" class="img-fluid rounded shadow" loading="lazy" />
+        </div>
+    }
+    <div class="@(string.IsNullOrEmpty(Model.ProfileImage) ? "col-12" : "col-md-8")">
+        <h1 class="mb-4">@Model.Name</h1>
+        <div class="bio-content">
+            @if (!string.IsNullOrEmpty(Model.Bio))
+            {
+                @Html.Raw(Model.Bio.Replace("\n", "<br />"))
+            }
+            else
+            {
+                <p>Welcome to my portfolio.</p>
+            }
+        </div>
+        <hr class="my-4" />
+        <p class="text-muted">Contact: <a href="mailto:artist@example.com">artist@example.com</a> · <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></p>
+    </div>
+</div>
