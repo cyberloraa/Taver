@@ -1,37 +1,33 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Taver.Data;
 using Taver.Models;
+using Taver.Services;
 
 namespace Taver.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ApplicationDbContext _db;
+    private readonly IStaticSiteData _data;
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+    public HomeController(ILogger<HomeController> logger, IStaticSiteData data)
     {
         _logger = logger;
-        _db = db;
+        _data = data;
     }
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
+    public IActionResult Index()
     {
-        var artist = await _db.Artists.Include(a => a.Artworks).FirstOrDefaultAsync(cancellationToken);
-        var featured = artist?.Artworks
-            .OrderByDescending(a => a.CreatedDate)
-            .Take(6)
-            .ToList() ?? new List<Artwork>();
+        var artist = _data.Artist;
+        var featured = _data.Artworks.Take(6).ToList();
         ViewData["Artist"] = artist;
         ViewData["FeaturedArtworks"] = featured;
         return View();
     }
 
-    public async Task<IActionResult> About(CancellationToken cancellationToken = default)
+    public IActionResult About()
     {
-        var artist = await _db.Artists.FirstOrDefaultAsync(cancellationToken);
+        var artist = _data.Artist;
         if (artist == null)
             return NotFound();
         return View(artist);

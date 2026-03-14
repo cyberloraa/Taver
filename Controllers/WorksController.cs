@@ -1,42 +1,36 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Taver.Data;
+using Taver.Services;
 
 namespace Taver.Controllers;
 
 public class WorksController : Controller
 {
-    private readonly ApplicationDbContext _db;
+    private readonly IStaticSiteData _data;
     private const int PageSize = 12;
 
-    public WorksController(ApplicationDbContext db)
+    public WorksController(IStaticSiteData data)
     {
-        _db = db;
+        _data = data;
     }
 
-    public async Task<IActionResult> Index(int page = 1, CancellationToken cancellationToken = default)
+    public IActionResult Index(int page = 1)
     {
-        var query = _db.Artworks
-            .Include(a => a.Artist)
-            .OrderByDescending(a => a.CreatedDate);
-
-        var total = await query.CountAsync(cancellationToken);
-        var items = await query
+        var all = _data.Artworks;
+        var total = all.Count;
+        var items = all
             .Skip((page - 1) * PageSize)
             .Take(PageSize)
-            .ToListAsync(cancellationToken);
+            .ToList();
 
         ViewData["TotalCount"] = total;
         ViewData["Page"] = page;
-        ViewData["TotalPages"] = (int)Math.Ceiling(total / (double)PageSize);
+        ViewData["TotalPages"] = total == 0 ? 1 : (int)Math.Ceiling(total / (double)PageSize);
         return View(items);
     }
 
-    public async Task<IActionResult> Detail(int id, CancellationToken cancellationToken = default)
+    public IActionResult Detail(int id)
     {
-        var artwork = await _db.Artworks
-            .Include(a => a.Artist)
-            .FirstOrDefaultAsync(a => a.ArtworkID == id, cancellationToken);
+        var artwork = _data.Artworks.FirstOrDefault(a => a.ArtworkID == id);
         if (artwork == null)
             return NotFound();
         return View(artwork);
