@@ -31,3 +31,16 @@ Output is in **`docs/`**. Open `docs/index.html` in a browser or serve the `docs
    - Deploy the `docs/` output to GitHub Pages.
 
 Your site will be at `https://<username>.github.io/<repo>/` (or your custom domain if configured).
+
+## Use your own domain
+
+1. **Set your domain in the project**  
+   In **`Data/site-data.json`**, set `"customDomain"` to your domain (e.g. `"www.mysite.com"` or `"mysite.com"`). Leave it as `""` if you don’t use a custom domain.
+
+2. **Tell GitHub**  
+   On GitHub: repo **Settings → Pages**. Under **Custom domain**, type the same domain and save.
+
+3. **Point your domain here**  
+   At your domain registrar (where you bought the domain), add a **CNAME** record: name `www` (or your subdomain), value `YOUR_USERNAME.github.io`. For a bare domain like `mysite.com`, use an **A** record to `185.199.108.153` (see [GitHub’s docs](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)).
+
+Then push your changes and redeploy. After DNS updates, turn on **Enforce HTTPS** in Settings → Pages.

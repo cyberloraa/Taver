@@ -245,6 +245,13 @@ for (const item of artworks) {
   fs.writeFileSync(path.join(OUTPUT_DIR, 'work', `${item.id}.html`), layout(item.title, metaDesc, detailBody, '../'));
 }
 
+// Custom domain for GitHub Pages: if set, write CNAME so the site is served at your domain
+const customDomain = (data.customDomain && String(data.customDomain).trim()) || null;
+if (customDomain) {
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'CNAME'), customDomain.trim(), 'utf8');
+  console.log('  CNAME:', customDomain);
+}
+
 console.log('Static site generated in docs/');
 console.log('  index.html, about.html, works/index.html, work/*.html');
 console.log('  css/, js/, images/');
